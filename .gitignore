@@ -1,6 +1,7 @@
 *.pyc
 wav
 mp3
+tmp
 *.wav
 *.mp3
 .DS_Store

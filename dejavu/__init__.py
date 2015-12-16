@@ -1,12 +1,16 @@
-import dejavu.decoder as decoder
-import fingerprint
+import json
 import multiprocessing
 import os
-import traceback
 import sys
-import json
+import traceback
 
-from flask import current_app, Flask, redirect, url_for, render_template
+from flask import current_app, flash, Flask, redirect, render_template, \
+    request, send_from_directory, url_for
+from werkzeug import secure_filename
+
+import dejavu.decoder as decoder
+import fingerprint
+
 
 class Dejavu(object):
 
@@ -199,9 +203,19 @@ def chunkify(lst, n):
     return [lst[i::n] for i in xrange(n)]
 
 
+# Following functions are added to run dejavu in the Goodle cloud with
+# Flask web framewor,
+
+def allowed_file(filename, allowed_extensions):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in allowed_extensions
+
+
 def create_app(config, db, debug=False, testing=False, config_overrides=None):
     app = Flask(__name__)
+    app.secret_key = 'nothing_secret'
     app.config.from_object(config)
+    app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
 
     app.debug = debug
     app.testing = testing
@@ -209,10 +223,25 @@ def create_app(config, db, debug=False, testing=False, config_overrides=None):
     if config_overrides:
         app.config.update(config_overrides)
 
-    dejavu = Dejavu(db)
+    djv = Dejavu(db)
 
     @app.route("/")
     def home():
-        return render_template('list.html', songs=dejavu.db.get_songs())
+        return render_template('list.html', songs=djv.db.get_songs())
+
+    @app.route("/webtest", methods=['GET', 'POST'])
+    def webtest():
+        if request.method == 'POST':
+            file = request.files['file']
+            if file and allowed_file(file.filename, config.ALLOWED_EXTENSIONS):
+                filename = secure_filename(file.filename)
+                full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(full_filename)
+                from dejavu.recognize import FileRecognizer
+                djv = Dejavu(db)
+                song = djv.recognize(FileRecognizer, full_filename)
+                flash('Recognized: [%s]' % song['song_name'])
+                return redirect(url_for('home', song=song['song_name']))
+        return render_template('webtest.html')
 
     return app
