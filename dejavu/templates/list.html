@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ol>
+  {% for song in songs %}
+  <li>{{song.song_name}}</li>
+  {% else %}
+  <p>No songs found</p>
+  {% endfor %}
+</ol>
+
+{% endblock %}
