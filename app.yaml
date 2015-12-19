@@ -17,6 +17,7 @@
 
 runtime: custom
 vm: true
+entrypoint: custom
 
 # Temporary setting to keep gcloud from uploading the virtualenv
 skip_files:
