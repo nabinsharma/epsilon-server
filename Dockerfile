@@ -16,11 +16,28 @@
 # and various os-level packages to allow installation of popular Python
 # libraries. The source is on github at:
 #   https://github.com/GoogleCloudPlatform/python-docker
-FROM gcr.io/google_appengine/python
+# FROM gcr.io/google_appengine/python
+FROM debian:jessie
+
+# => Installing numpy, scipy and pyaudio in virtualenv was not successful.
+# => As I am using _debian_ in GCP, I can issue following commands.
+RUN apt-get -q update && \
+  apt-get install --no-install-recommends -y -q \
+    python-numpy python-scipy python-pyaudio python-pip
+
+ENV LANG C.UTF-8
+
+EXPOSE 8080
+
+ENV PORT 8080
+
+WORKDIR /app
+
+RUN pip install virtualenv
 
 # Create a virtualenv for the application dependencies.
 # If you want to use Python 3, add the -p python3.4 flag.
-RUN virtualenv /env
+RUN virtualenv --system-site-packages /env
 
 # Set virtualenv environment variables. This is equivalent to running
 # source /env/bin/activate. This ensures the application is executed within

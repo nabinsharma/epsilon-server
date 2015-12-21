@@ -1,18 +1,5 @@
 Flask==0.10.1
-gcloud==0.7.1
 gunicorn==19.3.0
 oauth2client==1.5.0
-Flask-SQLAlchemy==2.0
 PyMySQL==0.6.6
-Flask-PyMongo==0.3.1
-PyMongo==2.8.1
 six==1.9.0
-
-# Custom
-#
-# Packages required by Dejavy (MySQL is already available
-# via PyMySQL).
-numpy==1.9.0
-scipy==0.14.0
-pyaudio=0.2.9
-pydub 0.16.0

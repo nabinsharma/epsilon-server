@@ -3,6 +3,8 @@ import multiprocessing
 import os
 import sys
 import traceback
+import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import current_app, flash, Flask, redirect, render_template, \
     request, send_from_directory, url_for
@@ -223,14 +225,36 @@ def create_app(config, db, debug=False, testing=False, config_overrides=None):
     if config_overrides:
         app.config.update(config_overrides)
 
+    log_file_handler = RotatingFileHandler('epsilon-server.log',
+                                           maxBytes=1024*1024*10,
+                                           backupCount=10)
+    log_file_handler.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    log_file_handler.setFormatter(formatter)
+    app.logger.addHandler(log_file_handler)
+
     djv = Dejavu(db)
 
     @app.route("/")
     def home():
+        app.logger.info("home: replying with song list")
         return render_template('list.html', songs=djv.db.get_songs())
+
+    @app.route("/recognize", methods=['POST'])
+    def recognize():
+        app.logger.info("recognize: received recognize request from a client")
+
+    @app.route("/log", methods=['GET'])
+    def log():
+        try:
+            with open('epsilon-server.log', 'r') as f:
+                return render_template('log.html', log_lines=reversed(f.readlines()))
+        except:
+            return render_template('log.html', log_lines=["Log file is missing"])
 
     @app.route("/webtest", methods=['GET', 'POST'])
     def webtest():
+        app.logger.info("webtest: received a web test request")
         if request.method == 'POST':
             file = request.files['file']
             if file and allowed_file(file.filename, config.ALLOWED_EXTENSIONS):
@@ -240,7 +264,8 @@ def create_app(config, db, debug=False, testing=False, config_overrides=None):
                 from dejavu.recognize import FileRecognizer
                 djv = Dejavu(db)
                 song = djv.recognize(FileRecognizer, full_filename)
-                flash('Recognized: [%s]' % song['song_name'])
+                flash('Recognized [%s]' % song['song_name'])
+                app.logger.info('webtest: recognized [%s]' % song['song_name'])
                 return redirect(url_for('home', song=song['song_name']))
         return render_template('webtest.html')
 

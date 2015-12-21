@@ -1,5 +1,5 @@
 # Google Cloud Project ID.
-PROJECT_ID = ""
+PROJECT_ID = "epsilon-server"
 
 DATABASE_BACKEND = "mysql"
 
