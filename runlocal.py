@@ -3,18 +3,20 @@ import json
 import os
 import logging
 
-from dejavu import Dejavu
-from database_handler import database
-from dejavu.recognize import MicrophoneRecognizer, FileRecognizer
-
-import config
+DEJAVU_CONFIG_FILE = 'dejavu.cnf'
 
 
 def main(args, loglevel):
     logging.basicConfig(format="%(levelname)s: %(message)s", level=loglevel)
 
+    # It's bad and there might be better solution. I just wanted to NOT
+    # run __init__ stuff while running this script.
+    from dejavu.dejavu_main import Dejavu
+    import dejavu.database as database
+    from dejavu.recognize import MicrophoneRecognizer, FileRecognizer
+
     db_cls = database.get_database()
-    with open(config.DEJAVU_CONFIG_FILE) as f:
+    with open(DEJAVU_CONFIG_FILE) as f:
         db_config_dict = json.load(f)
     db = db_cls(**db_config_dict.get("database", {}))
 
