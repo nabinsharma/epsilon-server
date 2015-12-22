@@ -3,6 +3,7 @@
 *.pyc
 *.wav
 .DS_Store
+env
 epsilon-server.log
 mp3
 test_tracks

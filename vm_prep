@@ -1,0 +1,30 @@
+# Steps followed to prep a Amazon EC2 Ubuntu VM to
+# run epsilon-server. Other modues are installed
+# using virtualenv and requirements file.
+
+# System
+
+# If 14.04, add repo for ffmpeg.
+sudo add-apt-repository ppa:mc3man/trusty-media
+sudo apt-get update
+sudo apt-get install ffmpeg
+
+sudo apt-get install git
+sudo apt-get install apache2
+sudo apt-get install libapache2-mod-wsgi
+
+sudo apt-get install gfortran
+sudo apt-get install libatlas-base-dev
+
+sudo apt-get install python-dev
+sudo apt-get install libportaudio-dev
+sudo apt-get install python-pip
+sudo -H pip install virtualenv
+
+# Installing numpy, scipy and pyaudio as system
+# modules as they need C compiler and take long
+# time to build (specially scipy), and cause a
+# lot of trouble in virtualenv.
+sudo apt-get install python-numpy
+sudo apt-get install python-scipy
+sudo apt-get install python-pyaudio
