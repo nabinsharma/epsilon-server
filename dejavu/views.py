@@ -18,7 +18,9 @@ def recognize():
 @app.route("/log", methods=['GET'])
 def log():
     try:
-        with open('epsilon-server.log', 'r') as f:
+        log_file = os.path.join(os.path.dirname(__file__),
+                                'epsilon-server.log')
+        with open(log_file, 'r') as f:
             return render_template('log.html', log_lines=reversed(f.readlines()))
     except:
         return render_template('log.html', log_lines=["Log file is missing"])

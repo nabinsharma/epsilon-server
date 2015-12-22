@@ -24,10 +24,11 @@ sudo apt-get install libportaudio-dev
 sudo apt-get install python-pip
 sudo -H pip install virtualenv
 
-# Installing numpy, scipy and pyaudio as system
-# modules as they need C compiler and take long
-# time to build (specially scipy), and cause a
-# lot of trouble in virtualenv.
+# Installing numpy, scipy, matplotlib and pyaudio
+# as system modules as they need C compiler and
+# take long time to build (specially scipy), and
+# cause a lot of trouble in virtualenv.
 sudo apt-get install python-numpy
 sudo apt-get install python-scipy
+sudo apt-get install python-matplotlib
 sudo apt-get install python-pyaudio
