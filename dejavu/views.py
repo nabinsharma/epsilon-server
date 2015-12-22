@@ -4,7 +4,7 @@ from flask import flash, redirect, render_template, \
     request, send_from_directory, url_for
 from werkzeug import secure_filename
 
-from dejavu import app, config, db, djv
+from dejavu import app, config, db, djv, log_file
 
 @app.route("/")
 def home():
@@ -18,8 +18,6 @@ def recognize():
 @app.route("/log", methods=['GET'])
 def log():
     try:
-        log_file = os.path.join(os.path.dirname(__file__),
-                                'epsilon-server.log')
         with open(log_file, 'r') as f:
             return render_template('log.html', log_lines=reversed(f.readlines()))
     except:

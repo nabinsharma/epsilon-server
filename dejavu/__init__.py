@@ -14,7 +14,7 @@ config = {'ALLOWED_EXTENSIONS': ["mp3", "wav"],
 app = Flask(__name__)
 app.secret_key = 'nothing_secret'
 
-log_file = os.path.join(os.path.dirname(__file__),
+log_file = os.path.join(os.path.dirname(__file__), '../tmp',
                         'epsilon-server.log')
 log_file_handler = RotatingFileHandler(log_file,
                                        maxBytes=1024*1024*10,
