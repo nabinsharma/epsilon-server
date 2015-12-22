@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from dejavu import app
 
 if __name__ == '__main__':
