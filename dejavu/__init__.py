@@ -15,6 +15,8 @@ config = {'ALLOWED_EXTENSIONS': ["mp3", "wav"],
           'UPLOAD_FOLDER': tmp_dir}
 
 app = Flask(__name__)
+# Logging is not working when deug is not set.
+app.debug = True
 app.secret_key = 'nothing_secret'
 
 log_file = os.path.join(tmp_dir, 'epsilon-server.log')
