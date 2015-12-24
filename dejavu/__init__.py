@@ -26,10 +26,11 @@ app.logger.addHandler(log_file_handler)
 
 # Initialize db
 db_cls = database.get_database()
-with open(r'./dejavu.cnf') as f:
+with open(os.path.join(os.path.dirname(__file__), '../dejavu.cnf'),
+          'epsilon-server.log') as f:
     db_config_dict = json.load(f)
 db = db_cls(**db_config_dict.get("database", {}))
-
+    
 djv = dejavu_main.Dejavu(db)
 
 

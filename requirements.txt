@@ -1,2 +1,4 @@
-Flask==0.10.1
-pydub==0.16.0
+# Following modules are required for successfully running the app.
+# Set up virtual environment with this file.
+#
+TODO
