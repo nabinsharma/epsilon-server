@@ -22,11 +22,11 @@ def log():
     try:
         with open(log_file, 'r') as f:
 	    log_lines = reversed(f.readlines())
-	    if not log_lines:
-	        log_lines = ["Log file is empty"]
-            return render_template('log.html', log_lines=log_lines)
+        if not log_lines:
+            log_lines = ["Log file is empty"]
+        return render_template('log.html', log_lines=log_lines)
     except:
-        return render_template('log.html', log_lines=["Log file is missing"])
+        return render_template('log.html', log_lines=["Can't read %s" % log_file])
 
 @app.route("/webtest", methods=['GET', 'POST'])
 def webtest():
