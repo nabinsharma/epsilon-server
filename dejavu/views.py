@@ -4,22 +4,27 @@ from flask import flash, redirect, render_template, \
     request, send_from_directory, url_for
 from werkzeug import secure_filename
 
-from dejavu import app, config, db, djv, log_file
+from dejavu import app, config, djv, log_file
 
 @app.route("/")
 def home():
     app.logger.info("home: replying with song list")
-    return render_template('list.html', songs=djv.db.get_songs())
+    songs = djv.db.get_songs()
+    return render_template('list.html', songs=songs)
 
 @app.route("/recognize", methods=['POST'])
 def recognize():
     app.logger.info("recognize: received recognize request from a client")
+    return "Recognize not yet implemented!"
 
 @app.route("/log", methods=['GET'])
 def log():
     try:
         with open(log_file, 'r') as f:
-            return render_template('log.html', log_lines=reversed(f.readlines()))
+	    log_lines = reversed(f.readlines())
+	    if not log_lines:
+	        log_lines = ["Log file is empty"]
+            return render_template('log.html', log_lines=log_lines)
     except:
         return render_template('log.html', log_lines=["Log file is missing"])
 
