@@ -12,7 +12,7 @@ def home():
     songs = djv.db.get_songs()
     return render_template('list.html', songs=songs)
 
-@app.route("/recognize", methods=['POST'])
+@app.route("/recognize", methods=['GET', 'POST'])
 def recognize():
     app.logger.info("recognize: received recognize request from a client")
     return "Recognize not yet implemented!"
