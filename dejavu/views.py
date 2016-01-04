@@ -14,7 +14,12 @@ def home():
 
 @app.route("/recognize", methods=['GET', 'POST'])
 def recognize():
-    app.logger.info("recognize: received recognize request from a client")
+    if request.json:
+        content = request.json
+        app.logger.info("recognize: received recognize request from a client")
+        app.logger.info("recognize: %s, %s" % (content.get("length"), content.get("channels")))
+    else:
+        app.logger.info("recognize: no json data in request")
     return "Recognize not yet implemented!"
 
 @app.route("/log", methods=['GET'])
