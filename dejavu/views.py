@@ -16,8 +16,9 @@ def home():
 def recognize():
     if request.json:
         content = request.json
-        app.logger.info("recognize: received recognize request from a client")
-        app.logger.info("recognize: %s, %s" % (content.get("length"), content.get("channels")))
+        app.logger.info("recognize: received recognize request from a client "
+                        "with %s samples from %s channels"
+                        % (content.get("length"), content.get("channels")))
     else:
         app.logger.info("recognize: no json data in request")
     return "Recognize not yet implemented!"
