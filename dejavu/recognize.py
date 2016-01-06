@@ -3,7 +3,7 @@ import dejavu.decoder as decoder
 import numpy as np
 import pyaudio
 import time
-
+import json
 
 class BaseRecognizer(object):
 
@@ -108,5 +108,45 @@ class MicrophoneRecognizer(BaseRecognizer):
         return self.recognize_recording()
 
 
+class MobileAppRecognizer(BaseRecognizer):
+    default_samplerate  = 44100
+    default_channels = 2
+
+    def __init__(self, dejavu):
+        super(MobileAppRecognizer, self).__init__(dejavu)
+        self.data = []
+        self.channels = MobileAppRecognizer.default_channels
+        self.samplerate = MicrophoneRecognizer.default_samplerate
+
+    def prepare_data(self, msg,
+                     samplerate=default_samplerate):
+        channels = msg['channels']
+        num_audio_samples = msg['length']
+        audio_data = msg['data']
+
+        self.channels = channels
+        self.samplerate = samplerate
+
+        if self.channels > 1 and num_audio_samples % 2 != 0:
+            audio_data = audio_data[:-1]
+
+        self.data = [[] for i in range(self.channels)]
+        for c in range(self.channels):
+            self.data[c].extend(audio_data[c::self.channels])
+
+    def recognize_received_data(self):
+        if not self.data:
+            raise NoReceivedData("No data in received message")
+        return self._recognize(*self.data)
+
+    def recognize(self, msg):
+        self.prepare_data(msg)
+        return self.recognize_received_data()
+
+
 class NoRecordingError(Exception):
+    pass
+
+
+class NoReceivedData(Exception):
     pass

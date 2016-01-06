@@ -14,14 +14,17 @@ def home():
 
 @app.route("/recognize", methods=['GET', 'POST'])
 def recognize():
-    if request.json:
-        content = request.json
+    try:
+        content = request.get_json()
         app.logger.info("recognize: received recognize request from a client "
                         "with %s samples from %s channels"
                         % (content.get("length"), content.get("channels")))
-    else:
-        app.logger.info("recognize: no json data in request")
-    return "Recognize not yet implemented!"
+        from dejavu.recognize import MobileAppRecognizer
+        song = djv.recognize(MobileAppRecognizer, content)
+        app.logger.info('recognize: recognized [%s]' % song['song_name'])
+    except BadRequest:
+        app.logger.info("recognize: bad data in request")
+    return ('', 204)
 
 @app.route("/log", methods=['GET'])
 def log():
