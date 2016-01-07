@@ -123,6 +123,8 @@ class MobileAppRecognizer(BaseRecognizer):
         channels = msg['channels']
         num_audio_samples = msg['length']
         audio_data = msg['data']
+        if isinstance(audio_data[0], list):
+            audio_data = audio_data[0]
 
         self.channels = channels
         self.samplerate = samplerate
