@@ -22,7 +22,7 @@ def recognize():
         from dejavu.recognize import MobileAppRecognizer
         song = djv.recognize(MobileAppRecognizer, content)
         app.logger.info('recognize: recognized [%s]' % song['song_name'])
-    except BadRequest:
+    except:
         app.logger.info("recognize: bad data in request")
     return ('', 204)
 
