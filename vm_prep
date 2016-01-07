@@ -1,6 +1,5 @@
 # Steps followed to prep a Amazon EC2 Ubuntu VM to
-# run epsilon-server. Other modues are installed
-# using virtualenv and requirements file.
+# run epsilon-server.
 
 # System
 
@@ -32,3 +31,5 @@ sudo apt-get install python-numpy
 sudo apt-get install python-scipy
 sudo apt-get install python-matplotlib
 sudo apt-get install python-pyaudio
+
+sudo apt-get install flask
