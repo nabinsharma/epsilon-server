@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <center>
+    <img src={{image_filename}}>
+    {% if "epsilon" in image_filename %}
+    <a href="{{ url_for("project_idea") }}">Idea</a>
+    {% else %}
+    <a href="{{ url_for("home") }}">Home</a>
+    {% endif %}
+  </center>
+</div>
+{% endblock %}

@@ -8,9 +8,20 @@ from dejavu import app, config, djv, log_file
 
 @app.route("/")
 def home():
+    return render_template("present.html",
+                           image_filename="/static/project-epsilon.jpg")
+
+@app.route("/idea")
+def project_idea():
+    return render_template("present.html",
+                           image_filename="/static/inspiration.jpg")
+
+@app.route("/songs", methods=['GET'])
+def songs():
     app.logger.info("home: replying with song list")
     songs = djv.db.get_songs()
     return render_template('list.html', songs=songs)
+
 
 @app.route("/recognize", methods=['GET', 'POST'])
 def recognize():
