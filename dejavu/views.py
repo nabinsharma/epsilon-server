@@ -1,28 +1,11 @@
-import os
 from operator import itemgetter
+import os
 
 from flask import flash, redirect, render_template, \
     request, send_from_directory, url_for
 from werkzeug import secure_filename
 
 from dejavu import app, config, djv, log_file
-
-@app.route("/")
-def home():
-    return render_template("present.html",
-                           image_filename="/static/project-epsilon.jpg")
-
-@app.route("/idea")
-def project_idea():
-    return render_template("present.html",
-                           image_filename="/static/inspiration.jpg")
-
-@app.route("/songs", methods=['GET'])
-def songs():
-    app.logger.info("home: replying with song list")
-    songs = [song for song in djv.db.get_songs()]
-    songs = sorted(songs, key=itemgetter(djv.db.FIELD_MATCH_COUNTS), reverse=True)
-    return render_template('list.html', songs=songs)
 
 
 @app.route("/recognize", methods=['GET', 'POST'])
@@ -39,6 +22,7 @@ def recognize():
         app.logger.info("recognize: bad data in request")
     return ('', 204)
 
+
 @app.route("/log", methods=['GET'])
 def log():
     try:
@@ -49,6 +33,7 @@ def log():
         return render_template('log.html', log_lines=log_lines)
     except:
         return render_template('log.html', log_lines=["Can't read %s" % log_file])
+
 
 @app.route("/webtest", methods=['GET', 'POST'])
 def webtest():
@@ -65,6 +50,30 @@ def webtest():
             app.logger.info('webtest: recognized [%s]' % song['song_name'])
             return redirect(url_for('home', song=song['song_name']))
     return render_template('webtest.html')
+
+
+@app.route("/")
+def home():
+    return render_template("present.html",
+                           image_filename="/static/project-epsilon.jpg")
+
+@app.route("/idea")
+def project_idea():
+    return render_template("present.html",
+                           image_filename="/static/inspiration.jpg")
+
+@app.route("/dsp")
+def core_dsp():
+    return render_template("dsp.html",
+                           image_filename="/static/epsilon_dsp.jpg")
+
+
+@app.route("/songs", methods=['GET'])
+def songs():
+    app.logger.info("home: replying with song list")
+    songs = [song for song in djv.db.get_songs()]
+    songs = sorted(songs, key=itemgetter(djv.db.FIELD_MATCH_COUNTS), reverse=True)
+    return render_template('list.html', songs=songs)
 
 
 def allowed_file(filename, allowed_extensions):
