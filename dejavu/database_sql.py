@@ -125,9 +125,9 @@ class SQLDatabase(Database):
     """ % (Database.FIELD_SONG_ID, SONGS_TABLENAME, FIELD_FINGERPRINTED)
 
     SELECT_SONGS = """
-        SELECT %s, %s, HEX(%s) as %s FROM %s WHERE %s = 1;
+        SELECT %s, %s, HEX(%s) as %s, %s FROM %s WHERE %s = 1;
     """ % (Database.FIELD_SONG_ID, Database.FIELD_SONGNAME, Database.FIELD_FILE_SHA1, Database.FIELD_FILE_SHA1,
-           SONGS_TABLENAME, FIELD_FINGERPRINTED)
+           FIELD_MATCH_COUNTS, SONGS_TABLENAME, FIELD_FINGERPRINTED)
 
     # drops
     DROP_FINGERPRINTS = "DROP TABLE IF EXISTS %s;" % FINGERPRINTS_TABLENAME

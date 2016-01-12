@@ -6,7 +6,7 @@
 </div>
 <ol>
   {% for song in songs %}
-  <li>{{song.song_name}}</li>
+  <li>{{song.song_name}} <b>[{{song.matchcounts}}]</b></li>
   {% else %}
   <p>No songs found</p>
   {% endfor %}

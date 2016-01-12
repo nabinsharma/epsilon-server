@@ -1,4 +1,5 @@
 import os
+from operator import itemgetter
 
 from flask import flash, redirect, render_template, \
     request, send_from_directory, url_for
@@ -19,7 +20,8 @@ def project_idea():
 @app.route("/songs", methods=['GET'])
 def songs():
     app.logger.info("home: replying with song list")
-    songs = djv.db.get_songs()
+    songs = [song for song in djv.db.get_songs()]
+    songs = sorted(songs, key=itemgetter(djv.db.FIELD_MATCH_COUNTS), reverse=True)
     return render_template('list.html', songs=songs)
 
 
